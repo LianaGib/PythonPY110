@@ -3,13 +3,14 @@ from django.http import JsonResponse
 from .models import DATABASE
 from django.http import HttpResponse, HttpResponseNotFound
 from logic.services import filtering_category, view_in_cart, add_to_cart, remove_from_cart, decreise_from_cart
+from django.shortcuts import render
 
 
 def shop_view(request):
     if request.method == "GET":
-        with open('store/shop.html', encoding="utf-8") as f:
-            data = f.read()
-        return HttpResponse(data)
+        return render(request,
+                      'store/shop.html',
+                      context={"products": DATABASE.values()})
 
 
 def products_view(request):
