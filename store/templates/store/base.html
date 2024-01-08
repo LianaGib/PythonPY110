@@ -1,0 +1,89 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block title %} <!-- Блок для названия страницы-->
+    <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=EB+Garamond&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Pacifico&display=swap" rel="stylesheet">
+
+	<link type="image/x-icon" href="{%static 'store/images/favicon.png' %}" rel="shortcut icon'%}">
+    <link rel="stylesheet" href="{% static 'store/css/open-iconic-bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'store/css/animate.css' %}">
+
+    <link rel="stylesheet" href="{% static 'store/css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'store/css/owl.theme.default.min.css' %}">
+    <link rel="stylesheet" href="{% static 'store/css/magnific-popup.css' %}">
+
+    <link rel="stylesheet" href="{% static 'store/css/aos.css' %}">
+
+    <link rel="stylesheet" href="{% static 'store/css/ionicons.min.css' %}">
+
+    <link rel="stylesheet" href="{% static 'store/css/bootstrap-datepicker.css' %}">
+    <link rel="stylesheet" href="{% static 'store/css/jquery.timepicker.css' %}">
+
+
+    <link rel="stylesheet" href="{% static 'store/css/flaticon.css' %}">
+    <link rel="stylesheet" href="{% static 'store/css/icomoon.css' %}">
+    <link rel="stylesheet" href="{% static 'store/css/style.css' %}">
+  </head>
+    {% endblock %}
+
+    {% block head %} <!-- Блок ссылок в head-->
+    <div class="py-1 bg-primary">
+		<div class="container">
+    		<div class="row no-gutters d-flex align-items-start align-items-center px-md-0">
+	    		<div class="col-lg-12 d-block">
+		    		<div class="row d-flex">
+		    			<div class="col-md pr-4 d-flex topper align-items-center">
+					    	<div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-phone2"></span></div>
+						    <span class="text">+ 7 (812) 123 45 678</span>
+					    </div>
+					    <div class="col-md pr-4 d-flex topper align-items-center">
+					    	<div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-paper-plane"></span></div>
+						    <span class="text">mystore@email.ru</span>
+					    </div>
+					    <div class="col-md-5 pr-4 d-flex topper align-items-center text-lg-right">
+						    <span class="text">Доставка в течении 3-5 рабочих дней. Бесплатный возврат</span>
+					    </div>
+				    </div>
+			    </div>
+		    </div>
+		  </div>
+    </div>
+    {% endblock %}
+</head>
+<body class="goto-here">
+    {% block header %} <!-- Блок для header страницы с данными магазина-->
+
+    {% endblock %}
+
+    {% block nav %} <!-- Блок для навигационной панели страницы магазина-->
+
+    {% endblock %}
+
+    {% block content %} <!-- Блок для уникального содержимого страницы-->
+
+    {% endblock %}
+
+    {% block news %} <!-- Блок для новостной панели-->
+
+    {% endblock %}
+
+    {% block footer %} <!-- Блок для нижней панели страницы-->
+
+    {% endblock %}
+
+    {% block scripts %} <!-- Блок для загрузки javascript страницы-->
+
+    {% endblock %}
+
+    {% block custom_scripts %}  <!-- Блок для загрузки дополнительного кода встроенного в html-->
+
+    {% endblock %}
+</body>
+</html>
