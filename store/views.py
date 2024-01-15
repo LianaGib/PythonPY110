@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from .models import DATABASE
 from django.http import HttpResponse, HttpResponseNotFound
 from logic.services import filtering_category, view_in_cart, add_to_cart, remove_from_cart, decreise_from_cart
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 
 def shop_view(request):
@@ -140,7 +140,20 @@ def delivery_estimate_view(request):
             return JsonResponse({"price": DATA_PRICE[country]["fix_price"]})
         return HttpResponseNotFound("Неверные данные")
 
-        # TODO Реализуйте логику расчёта стоимости доставки, которая выполняет следующее:
-        # Если в базе DATA_PRICE есть и страна (country) и существует город(city), то вернуть JsonResponse со словарём, {"price": значение стоимости доставки}
-        # Если в базе DATA_PRICE есть страна, но нет города, то вернуть JsonResponse со словарём, {"price": значение фиксированной стоимости доставки}
-        # Если нет страны, то вернуть HttpResponseNotFound("Неверные данные")
+
+def cart_buy_now_view(request, id_product):
+    if request.method == "GET":
+        result = add_to_cart(id_product)
+        if result:
+            return redirect("store:cart_view")
+
+        return HttpResponseNotFound("Неудачное добавление в корзину")
+
+
+def cart_remove_view(request, id_product):
+    if request.method == "GET":
+        result = remove_from_cart(id_product)  # TODO Вызвать функцию удаления из корзины
+        if result:
+            return redirect("store:cart_view")  # TODO Вернуть перенаправление на корзину
+
+        return HttpResponseNotFound("Неудачное удаление из корзины")
