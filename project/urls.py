@@ -29,6 +29,7 @@ def random_view(request):
         data = random()
         return HttpResponse(data)
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('random/', random_view),
@@ -37,7 +38,6 @@ urlpatterns = [
     path('', include('app_weather.urls')),
     path('', include('store.urls')),
     path('login/', include('app_login.urls')),
+    path('wishlist/', include('wishlist.urls'))
 ]
 
-from random import random
-from django.http import HttpResponse

@@ -1,9 +1,10 @@
-from django.shortcuts import render
 from django.http import JsonResponse
 from .models import DATABASE
 from django.http import HttpResponse, HttpResponseNotFound
 from logic.services import filtering_category, view_in_cart, add_to_cart, remove_from_cart, decreise_from_cart
 from django.shortcuts import render, redirect
+from django.contrib.auth import get_user
+from django.contrib.auth.decorators import login_required
 
 
 def shop_view(request):
@@ -49,25 +50,28 @@ def products_page_view(request, page):
             return HttpResponse(status=404)
 
 
+@login_required(login_url='login:login_view')
 def cart_view(request):
     if request.method == "GET":
-        data = view_in_cart()
+        current_user = get_user(request).username
+        data = view_in_cart(request)[current_user]
         if request.GET.get('format') == 'JSON':
             return JsonResponse(data, json_dumps_params={'ensure_ascii': False,
                                                          'indent': 4})
         products = []  # Список продуктов
         for product_id, quantity in data['products'].items():
             product = DATABASE[product_id]  # 1. Получите информацию о продукте из DATABASE по его product_id. product будет словарём
-            product['quantity'] = quantity # 2. в словарь product под ключом "quantity" запишите текущее значение товара в корзине
+            product['quantity'] = quantity  # 2. в словарь product под ключом "quantity" запишите текущее значение товара в корзине
             product["price_total"] = f"{quantity * product['price_after']:.2f}"  # добавление общей цены позиции с ограничением в 2 знака
-            products.append(product) # 3. добавьте product в список products
+            products.append(product)  # 3. добавьте product в список products
 
         return render(request, "store/cart.html", context={"products": products})
 
 
+@login_required(login_url='login:login_view')
 def cart_add_view(request, id_product):
     if request.method == "GET":
-        result = add_to_cart(id_product)  # TODO Вызвать ответственную за это действие функцию
+        result = add_to_cart(request, id_product)  # TODO Вызвать ответственную за это действие функцию
         if result:
             return JsonResponse({"answer": "Подукт успешно добавлен в корзину"},
                                 json_dumps_params={'ensure_ascii': False})
@@ -79,7 +83,7 @@ def cart_add_view(request, id_product):
 
 def cart_del_view(request, id_product):
     if request.method == "GET":
-        result = remove_from_cart(id_product)# TODO Вызвать ответственную за это действие функцию
+        result = remove_from_cart(request, id_product)  # TODO Вызвать ответственную за это действие функцию
         if result:
             return JsonResponse({"answer": "Продукт успешно удалён из корзины"},
                                 json_dumps_params={'ensure_ascii': False})
@@ -87,6 +91,8 @@ def cart_del_view(request, id_product):
         return JsonResponse({"answer": "Неудачное удаление из корзины"},
                             status=404,
                             json_dumps_params={'ensure_ascii': False})
+
+
 # Create your views here.
 def cart_dec_view(request, id_product):
     if request.method == "GET":
@@ -98,6 +104,7 @@ def cart_dec_view(request, id_product):
         return JsonResponse({"answer": "Неудачное удаление из корзины"},
                             status=404,
                             json_dumps_params={'ensure_ascii': False})
+
 
 def coupon_check_view(request, name_coupon):
     # DATA_COUPON - база данных купонов: ключ - код купона (name_coupon); значение - словарь со значением скидки в процентах и
@@ -141,9 +148,10 @@ def delivery_estimate_view(request):
         return HttpResponseNotFound("Неверные данные")
 
 
+@login_required(login_url='login:login_view')
 def cart_buy_now_view(request, id_product):
     if request.method == "GET":
-        result = add_to_cart(id_product)
+        result = add_to_cart(request, id_product)
         if result:
             return redirect("store:cart_view")
 
@@ -152,7 +160,7 @@ def cart_buy_now_view(request, id_product):
 
 def cart_remove_view(request, id_product):
     if request.method == "GET":
-        result = remove_from_cart(id_product)  # TODO Вызвать функцию удаления из корзины
+        result = remove_from_cart(request, id_product)  # TODO Вызвать функцию удаления из корзины
         if result:
             return redirect("store:cart_view")  # TODO Вернуть перенаправление на корзину
 

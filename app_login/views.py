@@ -1,10 +1,7 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import logout
+from django.contrib.auth import logout, login, authenticate
 from django.http import HttpResponseNotFound
-
-
-from django.contrib.auth import login, authenticate
-from django.shortcuts import render, redirect
+from logic.services import add_user_to_cart, add_user_to_wishlist
 
 
 def login_view(request):
@@ -16,6 +13,8 @@ def login_view(request):
         user = authenticate(username=data["username"], password=data["password"])
         if user:
             login(request, user)
+            add_user_to_cart(request, user.username)
+            add_user_to_wishlist(request, user.username)
             return redirect("/")
         return render(request, "login/login.html", context={"error": "Неверные данные"})
 
